@@ -143,6 +143,37 @@
   line-height: 1.4;
 }
 
+.event-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.event-action-button {
+  font-family: var(--font-family);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.event-action-edit {
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.event-action-edit:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+
+
+
+
 .empty-state {
   background-color: var(--color-surface);
   border: 1px dashed var(--color-border);
