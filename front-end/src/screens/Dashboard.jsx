@@ -8,7 +8,7 @@ const initialEvents = [
   {
     id: 1,
     name: "Concert de printemps",
-    date: "06-12-2026",
+    date: "2026-12-06",
     time: "20:00",
     location: "Tamatavy 501",
     description: "Un concert en plein air pour célébrer le début de la saison.",
@@ -17,7 +17,7 @@ const initialEvents = [
   {
     id: 2,
     name: "Conférence Tech 2026",
-    date: "07-03-2026",
+    date: "2026-03-07",
     time: "09:00",
     location: "Arena Toamasina",
     description: "Une journée dédiée aux dernières innovations technologiques.",
@@ -31,6 +31,7 @@ const Dashboard = () => {
   const [events, setEvents] = useState(initialEvents);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
 
   const handleLogout = () => {
     navigate("/login");
@@ -39,6 +40,11 @@ const Dashboard = () => {
   const handleCreate = (newEvent) => {
     setEvents([...events, { ...newEvent, id: Date.now() }]);
     setShowModal(false);
+  };
+
+  const handleUpdate = (updated) => {
+    setEvents(events.map((ev) => (ev.id === updated.id ? updated : ev)));
+    setEditingEvent(null);
   };
 
   return (
@@ -75,6 +81,14 @@ const Dashboard = () => {
                   <p className="event-meta">{ev.date} • {ev.time}</p>
                   <p className="event-meta">{ev.location}</p>
                   <p className="event-description">{ev.description}</p>
+                  <div className="event-actions">
+                    <button
+                      className="event-action-button event-action-edit"
+                      onClick={() => setEditingEvent(ev)}
+                    >
+                      Modifier
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
@@ -86,21 +100,33 @@ const Dashboard = () => {
         <EventModal onClose={() => setShowModal(false)} onSubmit={handleCreate} />
       )}
 
+      {editingEvent && (
+        <EventModal
+          onClose={() => setEditingEvent(null)}
+          onSubmit={handleUpdate}
+          initialData={editingEvent}
+        />
+      )}
+
     </div>
   );
 }
 
-function EventModal({ onClose, onSubmit }) {
-  const [form, setForm] = useState({
-    name: "",
-    date: "",
-    time: "",
-    location: "",
-    description: "",
-    cover: "",
-  });
+function EventModal({ onClose, onSubmit, initialData }) {
+  const [form, setForm] = useState(
+    initialData || {
+      name: "",
+      date: "",
+      time: "",
+      location: "",
+      description: "",
+      cover: "",
+    }
+);
   const [coverName, setCoverName] = useState("");
   const [error, setError] = useState("");
+
+  const isEdit = Boolean(initialData);
 
   const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
@@ -130,7 +156,7 @@ function EventModal({ onClose, onSubmit }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h2 className="modal-title">Nouvel événement</h2>
+        <h2 className="modal-title">{isEdit ? "Modifier l'événement" : "Nouvel événement"}</h2>
         <form className="modal-form" onSubmit={handleSubmit}>
           <div className="modal-field">
             <label className="modal-label">Photo de couverture (.jpeg ou .png)</label>
@@ -141,8 +167,12 @@ function EventModal({ onClose, onSubmit }) {
                 onChange={handleCoverChange}
                 className="cover-upload-input"
               />
-              <span className="cover-upload-button">Choisir une image</span>
-              <span className="cover-upload-name">{coverName || "Aucun fichier choisi"}</span>
+              <span className="cover-upload-button">
+                {form.cover ? "Changer l'image" : "Choisir une image"}
+              </span>
+              <span className="cover-upload-name">
+                {coverName || (form.cover ? "Image actuelle" : "Aucun fichier choisi")}
+              </span>
             </label>
             {form.cover && (
               <img src={form.cover} alt="Aperçu" className="cover-preview" />
@@ -181,7 +211,7 @@ function EventModal({ onClose, onSubmit }) {
               Annuler
             </button>
             <button type="submit" className="modal-button modal-button-primary">
-              Créer
+              {isEdit ? "Enregistrer" : "Créer"}
             </button>
           </div>
         </form>
