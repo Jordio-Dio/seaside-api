@@ -170,7 +170,15 @@
   color: #ffffff;
 }
 
+.event-action-delete {
+  color: #c0392b;
+  border: 1px solid #c0392b;
+}
 
+.event-action-delete:hover {
+  background-color: #c0392b;
+  color: #ffffff;
+}
 
 
 
@@ -295,6 +303,28 @@
 
 .modal-button-secondary:hover {
   background-color: var(--color-bg);
+}
+
+.modal-confirm {
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-confirm-text {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.modal-button-danger {
+  background-color: #c0392b;
+  color: #ffffff;
+  border-color: #c0392b;
+}
+
+.modal-button-danger:hover {
+  background-color: #a93226;
 }
 
 /* Cover upload */

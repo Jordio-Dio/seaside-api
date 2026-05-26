@@ -32,6 +32,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
+  const [deleteEventId, setDeleteEventId] = useState(null);
 
   const handleLogout = () => {
     navigate("/login");
@@ -45,6 +46,15 @@ const Dashboard = () => {
   const handleUpdate = (updated) => {
     setEvents(events.map((ev) => (ev.id === updated.id ? updated : ev)));
     setEditingEvent(null);
+  };
+
+  const handleDelete = (id) => {
+    setDeleteEventId(id);
+  };
+
+  const confirmDelete = () => {
+    setEvents(events.filter((ev) => ev.id !== deleteEventId));
+    setDeleteEventId(null);
   };
 
   return (
@@ -88,6 +98,12 @@ const Dashboard = () => {
                     >
                       Modifier
                     </button>
+                    <button
+                      className="event-action-button event-action-delete"
+                      onClick={() => handleDelete(ev.id)}
+                    >
+                      Supprimer
+                    </button>
                   </div>
                 </div>
               </article>
@@ -105,6 +121,13 @@ const Dashboard = () => {
           onClose={() => setEditingEvent(null)}
           onSubmit={handleUpdate}
           initialData={editingEvent}
+        />
+      )}
+
+      {deleteEventId && (
+        <DeleteConfirmModal
+          onCancel={() => setDeleteEventId(null)}
+          onConfirm={confirmDelete}
         />
       )}
 
@@ -215,6 +238,27 @@ function EventModal({ onClose, onSubmit, initialData }) {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+}
+
+function DeleteConfirmModal({ onCancel, onConfirm }) {
+  return (
+    <div className="modal-overlay" onClick={onCancel}>
+      <div className="modal modal-confirm" onClick={(e) => e.stopPropagation()}>
+        <h2 className="modal-title">Confirmer la suppression</h2>
+        <p className="modal-confirm-text">
+          Voulez-vous vraiment supprimer cet événement ?
+        </p>
+        <div className="modal-actions">
+          <button className="modal-button modal-button-secondary" onClick={onCancel}>
+            Annuler
+          </button>
+          <button className="modal-button modal-button-danger" onClick={onConfirm}>
+            Supprimer
+          </button>
+        </div>
       </div>
     </div>
   );
