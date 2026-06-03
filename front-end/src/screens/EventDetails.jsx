@@ -316,6 +316,7 @@ const EventDetails = () => {
         <DeleteConfirmModal
           onCancel={() => setConfirmingDelete(false)}
           onConfirm={handleDelete}
+          toDelete="evenement"
         />
       )}
     </div>

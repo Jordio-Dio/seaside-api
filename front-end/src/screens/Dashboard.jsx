@@ -189,13 +189,13 @@ export const EventModal = ({ onClose, onSubmit, initialData }) => {
   );
 }
 
-export const DeleteConfirmModal = ({ onCancel, onConfirm }) => {
+export const DeleteConfirmModal = ({ onCancel, onConfirm,toDelete }) => {
   return (
     <div className="modal-overlay" onClick={onCancel}>
       <div className="modal modal-confirm" onClick={(e) => e.stopPropagation()}>
         <h2 className="modal-title">Confirmer la suppression</h2>
         <p className="modal-confirm-text">
-          Voulez-vous vraiment supprimer cet événement ?
+          {`Voulez-vous vraiment supprimer cet ${toDelete} ?`}
         </p>
         <div className="modal-actions">
           <button className="modal-button modal-button-secondary" onClick={onCancel}>
